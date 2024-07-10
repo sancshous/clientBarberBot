@@ -24,7 +24,7 @@ h1, h2 {
 
 /* Медиа-запросы для мобильных устройств */
 @media (max-width: 768px) {
-    .container {
+    .main-container {
         padding: 10px;
     }
 
@@ -152,6 +152,7 @@ h1, h2 {
 }
 
 #example {
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
 }

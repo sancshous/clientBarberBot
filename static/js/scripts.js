@@ -8,9 +8,11 @@ $(document).ready(function() {
     if (window.matchMedia("(min-width: 768px)").matches) {
         $.bsCalendar.setDefault('width', '400px');
         $('#example').bsCalendar('refresh');
+        $('#example').css('width', '100%')
     } else {
-        $.bsCalendar.setDefault('width', '250px');
+        $.bsCalendar.setDefault('width', '300px');
         $('#example').bsCalendar('refresh');
+        $('#example').css('width', '100%')
     }
 
     function fetchMasters() {
