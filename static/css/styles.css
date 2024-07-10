@@ -28,6 +28,17 @@ h1, h2 {
         padding: 10px;
     }
 
+    #editCartModal .modal-dialog {
+        margin: 0 auto;
+        max-width: 80%;
+    }
+
+    #cart {
+        left: 50%;
+        width: 80%;
+        transform: translateX(-50%);
+    }
+
     h1, h2 {
         font-size: 1.5em;
     }
@@ -115,14 +126,14 @@ h1, h2 {
     display: flex;
     flex-direction: column;
     position: fixed;
-    max-width: 400px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 500px;
     width: 100%;
     font-size: 16px;
-    margin-left: auto;
-    margin-right: auto;
     min-height: 80px;
     z-index: 200;
-    bottom: 0;
+    bottom: 30px;
     padding: 20px 15px 20px 15px;
     border-radius: 6px;
     box-shadow: 0 12px 48px #0613333d;
@@ -130,4 +141,17 @@ h1, h2 {
 
 .nextMaster {
     margin-top: 10px;
+}
+
+.p-1 {
+    cursor: pointer;
+}  
+
+.border-secondary {
+    background-color: #a6d4e9;
+}
+
+#example {
+    margin-left: auto;
+    margin-right: auto;
 }

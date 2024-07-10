@@ -152,6 +152,8 @@ $(document).ready(function() {
     $(document).on('updateCart', function () {
         //console.log(cart_services)
         var cart = $('#cart');
+        var modalCartContainer = $('#modalCartContainer');
+        modalCartContainer.empty();
         cart.empty();
         if(cart_services.length == 0) {
             cart.hide();
@@ -188,4 +190,72 @@ $(document).ready(function() {
         $('#dates-form').show();
     });
 
+    $('#example').on('init',function (e) {
+        console.log('hi')
+    })
+    function widthCalendar(x) {
+        if (x.matches) { // If media query matches
+            $.bsCalendar.setDefault('width', '400px');
+            $('#example').bsCalendar('refresh');
+            $('#cart').css('width', '100%')
+        } else {
+            $.bsCalendar.setDefault('width', '250px');
+            $('#example').bsCalendar('refresh');
+            var cart = document.getElementById('cart');
+            cart.style.removeProperty('width')
+        }
+    }
+
+    // Create a MediaQueryList object
+    var x = window.matchMedia("(max-width: 768px)")
+
+    // Call listener function at run time
+    widthCalendar(x);
+
+    // Attach listener function on state changes
+    x.addEventListener("change", function() {
+        widthCalendar(x);
+    });
+
+
+
+    $('#example').bsCalendar({
+        locale: 'ru',
+        url: null, // save as data-bs-target
+        width: '400px',
+        icons: {
+          prev: 'fa-solid fa-arrow-left fa-fw',
+          next: 'fa-solid fa-arrow-right fa-fw',
+          eventEdit: 'fa-solid fa-edit fa-fw',
+          eventRemove: 'fa-solid fa-trash fa-fw'
+        },
+        showTodayHeader: false, 
+        showEventEditButton: false,
+        showEventRemoveButton: false,
+        showPopover: true, 
+        popoverConfig: {
+          animation: true,
+          html: true,
+          delay: 400,
+          placement: 'top',
+          trigger: 'hover'
+        },
+        formatPopoverContent: function (events) {
+          return '';
+        },
+        formatEvent: function (event) {
+          return drawEvent(event);
+        },
+        queryParams: function (params) {
+          return params;
+        },
+        onClickEditEvent: function (e, event) {
+        },
+        onClickDeleteEvent: function (e, event) {
+        },
+    });
+
+    $('#example').on('change-day', function (e, date, events) {
+        console.log('hi')
+    })
 });
