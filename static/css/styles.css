@@ -129,7 +129,7 @@ h1, h2 {
     left: 50%;
     transform: translateX(-50%);
     max-width: 500px;
-    width: 100%;
+    width: 80%;
     font-size: 16px;
     min-height: 80px;
     z-index: 200;

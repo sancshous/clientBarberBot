@@ -5,6 +5,14 @@ $(document).ready(function() {
     let services = [];
     let cart_services = [];
 
+    if (window.matchMedia("(min-width: 768px)").matches) {
+        $.bsCalendar.setDefault('width', '400px');
+        $('#example').bsCalendar('refresh');
+    } else {
+        $.bsCalendar.setDefault('width', '250px');
+        $('#example').bsCalendar('refresh');
+    }
+
     function fetchMasters() {
         $.ajax({
             url: '/masters',
@@ -193,31 +201,6 @@ $(document).ready(function() {
     $('#example').on('init',function (e) {
         console.log('hi')
     })
-    function widthCalendar(x) {
-        if (x.matches) { // If media query matches
-            $.bsCalendar.setDefault('width', '400px');
-            $('#example').bsCalendar('refresh');
-            $('#cart').css('width', '100%')
-        } else {
-            $.bsCalendar.setDefault('width', '250px');
-            $('#example').bsCalendar('refresh');
-            var cart = document.getElementById('cart');
-            cart.style.removeProperty('width')
-        }
-    }
-
-    // Create a MediaQueryList object
-    var x = window.matchMedia("(max-width: 768px)")
-
-    // Call listener function at run time
-    widthCalendar(x);
-
-    // Attach listener function on state changes
-    x.addEventListener("change", function() {
-        widthCalendar(x);
-    });
-
-
 
     $('#example').bsCalendar({
         locale: 'ru',
