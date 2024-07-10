@@ -169,7 +169,7 @@ $(document).ready(function() {
             cart.hide();
         } else {
             cart.show();
-            var header = $('<div style="display: flex; align-items: center;">')
+            var header = $('<div style="display: flex; align-items: center; cursor: pointer;">')
             var end = cart_services.length == 1 || cart_services.length >= 5 ? '' : 'и';
             var count = $(`<span>${cart_services.length} услуг${end}</span>`)
             var time = 0

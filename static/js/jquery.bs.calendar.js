@@ -68,7 +68,7 @@
         }
     };
 
-    Date.DEFAULT_LOCALE = 'en-US';
+    Date.DEFAULT_LOCALE = 'ru-RU';
 
     Date.UNITS = {
         year: 24 * 60 * 60 * 1000 * 365,
@@ -551,15 +551,27 @@
 
     }
 
-    function getCellCss(containerElement) {
+    function getCellCss(containerElement, isDisabled) {
         const widthHeight = getCellWidthHeight(containerElement);
-        return {
-            // borderRadius: '50%',
-            'text-align': 'center',
-            'vertical-align': 'middle',
-            width: widthHeight + 'px',
-            height: widthHeight + 'px',
-            fontSize: getFontSize(containerElement)
+        if(isDisabled) {
+            return {
+                // borderRadius: '50%',
+                'text-align': 'center',
+                'vertical-align': 'middle',
+                'pointer-events': 'none',
+                width: widthHeight + 'px',
+                height: widthHeight + 'px',
+                fontSize: getFontSize(containerElement)
+            }
+        } else {
+            return {
+                // borderRadius: '50%',
+                'text-align': 'center',
+                'vertical-align': 'middle',
+                width: widthHeight + 'px',
+                height: widthHeight + 'px',
+                fontSize: getFontSize(containerElement)
+            }
         }
     }
 
@@ -701,6 +713,7 @@
                 week.days.forEach(day => {
                     const classes = [settings.classes.tableData.all];
                     const isToday = today.formatDate(false) === day.formatDate(false);
+                    var isDisabled = false;
                     const isInMonth = selectedDate.formatDate(true)[1] === day.formatDate(true)[1];
                     if (isToday && isInMonth) {
                         foundToday = true;
@@ -708,17 +721,20 @@
                         classes.push('js-today');
                     }
                     if (isInMonth) {
-                        if(day < today && !isToday)
+                        if(day < today && !isToday) {
                             classes.push(settings.classes.tableData.notInMonth);
+                            isDisabled = true;
+                        }
                         else
                             classes.push(settings.classes.tableData.inMonth)
                     } else {
                         classes.push(settings.classes.tableData.notInMonth);
+                        isDisabled = true;
                     }
                     const dayTD = $('<td>', {
                         class: 'position-relative p-1',
                         'data-date': day.formatDate(false),
-                        css: getCellCss(containerElement)
+                        css: getCellCss(containerElement, isDisabled)
                     }).appendTo(tr);
                     const addClasses = classes.join(' ');
                     let html = getCellInner(
