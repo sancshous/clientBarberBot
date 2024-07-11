@@ -8,13 +8,16 @@ def create_db():
 
     cursor.execute('''CREATE TABLE IF NOT EXISTS masters (
                         id INTEGER PRIMARY KEY,
-                        name TEXT NOT NULL)''')
+                        name TEXT NOT NULL,
+                        pos_id INTEGER NOT NULL,
+                        pos_name TEXT NOT NULL)''')
 
     cursor.execute('''CREATE TABLE IF NOT EXISTS services (
                         id INTEGER PRIMARY KEY,
                         name TEXT NOT NULL,
                         price REAL NOT NULL,
-                        duration INTEGER NOT NULL)''')  # Длительность услуги в минутах
+                        duration INTEGER NOT NULL,
+                        difficult INTEGER NOT NULL)''')  # Длительность услуги в минутах
 
     cursor.execute('''CREATE TABLE IF NOT EXISTS appointments (
                         id INTEGER PRIMARY KEY,
@@ -28,11 +31,11 @@ def create_db():
                         FOREIGN KEY (service_id) REFERENCES services(id))''')
 
     # Добавление тестовых данных
-    cursor.executemany('''INSERT INTO masters (id, name) VALUES (?, ?)''', 
-                       [(1, 'Иван'), (2, 'Петр'), (3, 'Сергей')])
+    cursor.executemany('''INSERT INTO masters (id, name, pos_id, pos_name) VALUES (?, ?, ?, ?)''', 
+                       [(1, 'Иван', 1, 'Топ-барбер'), (2, 'Петр', 2, 'Барбер'), (3, 'Сергей', 3, 'Стажер')])
 
-    cursor.executemany('''INSERT INTO services (id, name, price, duration) VALUES (?, ?, ?, ?)''', 
-                       [(1, 'Стрижка', 500, 60), (2, 'Бритье', 300, 30), (3, 'Укладка', 400, 45)])
+    cursor.executemany('''INSERT INTO services (id, name, price, duration, difficult) VALUES (?, ?, ?, ?, ?)''', 
+                       [(1, 'Стрижка', 500, 60, 1), (2, 'Бритье', 300, 30, 2), (3, 'Укладка', 400, 45, 3)])
 
     conn.commit()
     conn.close()

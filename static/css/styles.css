@@ -94,12 +94,21 @@ h1, h2 {
     display: flex;
     align-items: center;
     height: 60px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.form-column {
+    display: flex;
+    flex-direction: column;
+    height: 60px;
     cursor: pointer;
     margin-left: 20px;
-    padding: 7px 15px 7px 15px;
+    padding: 7px 15px 15px 15px;
     margin-bottom: 7px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
+    transition: height 0.5s ease-in-out;
 }
 
 .myCheckbox {
@@ -122,6 +131,10 @@ h1, h2 {
     opacity: 50%;
 }
 
+.pos {
+    opacity: 50%;
+}
+
 #cart {
     display: flex;
     flex-direction: column;
@@ -141,6 +154,7 @@ h1, h2 {
 
 .nextMaster {
     margin-top: 10px;
+    margin-left: auto;
 }
 
 .p-1 {
@@ -155,4 +169,27 @@ h1, h2 {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
+}
+
+.header-form {
+    margin-bottom: 10px;
+}
+
+.radio {
+    margin-left: auto;
+    transform: scale(1.5);
+    cursor: pointer;
+}
+
+.form-tooltip {
+    font-size: 12px;
+}
+
+#cart-container {
+    margin-bottom: 10px;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
 }

@@ -28,6 +28,16 @@ def get_masters():
 def get_services():
     services = query_db('SELECT * FROM services')
     return jsonify([dict(service) for service in services])
+
+@app.route('/master_difficult/<pos_id>', methods=['GET'])
+def get_masters_difficult(pos_id):
+    conn = sqlite3.connect('barbershop.db')
+    cur = conn.cursor()
+    cur.execute('SELECT id, name, difficult FROM services where difficult >= ?', (pos_id))
+    masters_difficult = [{'id': row[0], 'name': row[1], 'difficult': row[2]} for row in cur.fetchall()]
+
+    return jsonify(masters_difficult)
+
 @app.route('/available-dates', methods=['GET'])
 def get_available_dates():
     master_id = request.args.get('master_id')

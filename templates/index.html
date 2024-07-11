@@ -44,12 +44,15 @@
         </div>
         <div id="masters-form" style="display: none;">
             <div>
-                <h5>Выбрать специалиста</h5>
+                <h5 class="header-form">Выбрать специалиста</h5>
+                <div id="masters-container" class="form-container">
+                    
+                </div>
             </div>
         </div>
         <div id="services-form" style="display: none;">
             <div>
-                <h5>Выбрать услуги</h5>
+                <h5 class="header-form">Выбрать услуги</h5>
                 <div id="services-container" class="form-container">
                     
                 </div>
@@ -57,7 +60,7 @@
         </div>
         <div id="dates-form" style="display: none;">
             <div>
-                <h5>Выбрать дату и время</h5>
+                <h5 class="header-form">Выбрать дату и время</h5>
                 <div data-bs-toggle="calendar" id="example">
                 </div>
                 <div id="time-container">
@@ -66,7 +69,10 @@
             </div>
         </div>
         <div id="cart" style="display: none;">
+            <div id="cart-container">
 
+            </div>
+            <button class="btn btn-success cartBtn"></button>
         </div>
     </div>
     <!-- Модальное окно редактирования корзины услуг -->
@@ -74,6 +80,9 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
+                    <div id="modalHeader" style="width: 100%;">
+
+                    </div>
                     <button type="button" id="closeBtnObjForm" class="btn-close" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
