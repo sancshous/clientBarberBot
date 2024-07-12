@@ -8,9 +8,15 @@ body {
 }
 
 .main-container {
+    display: flex;
     width: 90%;
+    flex-direction: column;
     max-width: 500px;
     margin: auto;
+    height: auto;
+    flex: 1;
+    margin-bottom: 150px;
+    overflow-y: hidden;
     padding: 20px;
     background: #fff;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -98,7 +104,7 @@ h1, h2 {
     cursor: pointer;
 }
 
-.form-column {
+.form-column, #time-container {
     display: flex;
     flex-direction: column;
     height: 60px;
@@ -109,6 +115,13 @@ h1, h2 {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     transition: height 0.5s ease-in-out;
+}
+
+#time-container {
+    height: auto;
+    box-shadow: none;
+    border-radius: 0;
+    margin-left: 0;
 }
 
 .myCheckbox {
@@ -131,7 +144,7 @@ h1, h2 {
     opacity: 50%;
 }
 
-.pos {
+.pos, .result-time {
     opacity: 50%;
 }
 
@@ -192,4 +205,69 @@ h1, h2 {
 .modal-body {
     display: flex;
     flex-direction: column;
+}
+
+.day-section {
+    display: flex;
+    flex-direction: column;
+    max-height: 1000px;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out;
+}
+
+.header-section {
+    display: flex;
+    align-items: center;
+}
+
+.arrow {
+    margin-left: auto;
+    transform: rotate(180deg);
+    transition: 300ms linear all;
+}
+
+.time-container {
+    display: flex;
+    height: auto;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.time {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 40px;
+    border-radius: 10px;
+    margin-right: 10px;
+    margin-bottom: 15px;
+    background-color: rgb(234, 238, 244);
+}
+
+.time:hover {
+    background-color: rgb(199, 202, 207);;
+}
+
+.time:active {
+    background-color: #a6d4e9;
+}
+
+.closed-time {
+    pointer-events:none;
+    cursor: default;
+    opacity: 30%;   
+}
+
+#result-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.master-name {
+    font-weight: bold;
+}
+
+.picked-time {
+    background-color: #a6d4e9;
 }

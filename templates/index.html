@@ -1,12 +1,15 @@
 <!-- templates/index.html -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Barbershop</title>
     <link rel="stylesheet" href="../static/css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
@@ -15,13 +18,15 @@
         crossorigin="anonymous"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap"
+        rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="../static/css/checkbox.css">
     <script src="../static/js/jquery.bs.calendar.js"></script>
 
     <script src="../static/js/scripts.js"></script>
 </head>
+
 <body>
     <div class="main-container">
         <div class="header">
@@ -46,7 +51,7 @@
             <div>
                 <h5 class="header-form">Выбрать специалиста</h5>
                 <div id="masters-container" class="form-container">
-                    
+
                 </div>
             </div>
         </div>
@@ -54,7 +59,7 @@
             <div>
                 <h5 class="header-form">Выбрать услуги</h5>
                 <div id="services-container" class="form-container">
-                    
+
                 </div>
             </div>
         </div>
@@ -65,6 +70,21 @@
                 </div>
                 <div id="time-container">
 
+                </div>
+            </div>
+        </div>
+        <div id="result-form" style="display: none;">
+            <div>
+                <h5 class="header-form">Итого</h5>
+                <div id="result-container">
+                    <div class="form-row"><img style="margin-right: 7px;" src="../static/icons/avatar.svg">
+                        <div style="display:flex;flex-direction:column;"><span class="master-name"></span><span
+                                class="pos"></span></div>
+                    </div>
+                    <div class="form-row"><div class="svg-container"><img src="../static/icons/calendar.svg"></div>
+                        <div style="display:flex;flex-direction:column; margin-left: 7px;"><span class="result-date"></span><span
+                                class="result-time"></span></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -95,6 +115,7 @@
             </div>
         </div>
     </div>
-    
+
 </body>
+
 </html>

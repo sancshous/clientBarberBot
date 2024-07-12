@@ -4,6 +4,7 @@ $(document).ready(function() {
     let masters = [];
     let services = [];
     let masters_difficult = []
+    let closedTimes = [];
     let cart_services = [];
     let final_cart = {};
 
@@ -15,6 +16,16 @@ $(document).ready(function() {
         $.bsCalendar.setDefault('width', '300px');
         $('#example').bsCalendar('refresh');
         $('#example').css('width', '100%')
+    }
+
+    Date.prototype.formatDate = function (asArray) {
+        let d = new Date(this.valueOf()), month = '' + (d.getMonth() + 1), day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+
+        return asArray ? [year, month, day] : [year, month, day].join('-');
     }
 
     function fetchMasters(callback) {
@@ -53,40 +64,16 @@ $(document).ready(function() {
         });
     }
 
-    function fetchAvailableDates() {
-        const masterId = $('#masters').val();
-        const serviceId = $('#services').val();
+    function fetchClosedTimes(date, callback) {
+        const masterId = final_cart.master.id;
         $.ajax({
-            url: '/available-dates',
+            url: `/closed-times/${date}`,
             method: 'GET',
-            data: { master_id: masterId, service_id: serviceId },
+            data: { master_id: masterId },
             success: function(data) {
-                const datesSelect = $('#dates');
-                datesSelect.empty().append('<option value="">--Выберите дату--</option>');
-                data.forEach(function(date) {
-                    datesSelect.append(`<option value="${date.date}">${date.date}</option>`);
-                });
-                $('#step3').show();
-            }
-        });
-    }
-
-    function fetchAvailableTimes() {
-        const masterId = $('#masters').val();
-        const serviceId = $('#services').val();
-        const date = $('#dates').val();
-        $.ajax({
-            url: '/available-times',
-            method: 'GET',
-            data: { master_id: masterId, service_id: serviceId, date: date },
-            success: function(data) {
-                const timesSelect = $('#times');
-                timesSelect.empty().append('<option value="">--Выберите время--</option>');
-                data.forEach(function(time) {
-                    timesSelect.append(`<option value="${time.time}">${time.time}</option>`);
-                });
-                timesSelect.show();
-                $('#client-info').show();
+                closedTimes = []
+                closedTimes = data;
+                callback();
             }
         });
     }
@@ -125,11 +112,13 @@ $(document).ready(function() {
         $(this).hide()
         $('#masters-form').hide();
         $('#services-form').hide();
+        $('#result-form').hide();
         $('#dates-form').hide();
         $('#home-form').show();
         final_cart = {};
         cart_services = [];
         $('#cart').hide()
+        $('#time-container').empty()
     })
 
     function picMaster() {
@@ -265,7 +254,7 @@ $(document).ready(function() {
 
     function updateCartBtn(text) {
         var btn = $('.cartBtn')
-        if(final_cart.hasOwnProperty('master') && final_cart.hasOwnProperty('service'))
+        if(final_cart.hasOwnProperty('master') && final_cart.hasOwnProperty('service') && text != 'Готово')
             btn.text('Выбрать дату и время')
         else
             btn.text(text)
@@ -384,11 +373,56 @@ $(document).ready(function() {
         }
     })
 
+    function showResult() {
+        var resultContainer = $('#result-container')
+        var master = resultContainer.find('.master-name')
+        var pos = resultContainer.find('.pos')
+        master.text(final_cart.master.name)
+        pos.text(final_cart.master.pos_name)
+
+        var date = resultContainer.find('.result-date')
+        date.text(formatLocaleDate(final_cart.date))
+        var totalDuration = 0;
+        final_cart.service.forEach(elem => {
+            totalDuration += elem.duration;
+        });
+
+        var timeStr = final_cart.time.includes('.') ? String(Math.trunc(Number(final_cart.time))) + ':30' : final_cart.time + ':00';
+        var endTime = String(Number(final_cart.time) + totalDuration / 60)
+        timeStr += endTime.includes('.') ? ' — ' + String(Math.trunc(Number(endTime))) + ':30' : ' — ' + endTime + ':00';
+        var time = resultContainer.find('.result-time')
+        time.text(timeStr)
+    }
+
+    function formatLocaleDate(datestring) {
+        // Создаем объект Date из строки
+        const date = new Date(datestring);
+
+        // Создаем форматировщик для дня недели на русском языке
+        const dayFormatter = new Intl.DateTimeFormat('ru-RU', { weekday: 'long' });
+        const dayOfWeek = dayFormatter.format(date);
+
+        // Создаем форматировщик для даты (день и месяц) на русском языке
+        const dateFormatter = new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'long' });
+        const dayAndMonth = dateFormatter.format(date);
+
+        // Результат
+        const result = `${dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1)}, ${dayAndMonth}`;
+        return result;
+    }
+
     $('.cartBtn').on('click', function () {
-        if(final_cart.hasOwnProperty('master') && final_cart.hasOwnProperty('service')) {
+        if(final_cart.hasOwnProperty('date')) {
+            $('#result-form').show()
+            updateCartBtn('Записаться')
+            showResult()
+            $('#dates-form').hide();
+        } else if(final_cart.hasOwnProperty('master') && final_cart.hasOwnProperty('service')) {
             $('#dates-form').show();
             $('#masters-form').hide();
             $('#services-form').hide();
+            $('#cart').hide();
+            $('.js-today').trigger('click')
         } else if(final_cart.hasOwnProperty('master')) {
             updateCartBtn('Выбрать дату и время')
             $('#masters-form').hide();
@@ -447,6 +481,129 @@ $(document).ready(function() {
     });
 
     $('#example').on('change-day', function (e, date, events) {
-        console.log('hi')
+        fetchClosedTimes(date.formatDate(false), function () {
+            var timeContainer = $('#time-container')
+            timeContainer.empty()
+
+            var before12 = $('<div class="day-section opened">')
+            var divHeaderbefore12 = $('<div class="header-section">')
+            var headerbefore12 = $('<h5>Утро</h5>')
+            var arrowbefore12 = $('<img class="arrow" src="../static/icons/open-arrow.svg">')
+            divHeaderbefore12.append(headerbefore12, arrowbefore12)
+            divHeaderbefore12.on('click', function (e) {
+                e.stopPropagation();
+                openSection(divHeaderbefore12)
+            })
+            var timeContainerBefore12 = $('<div class="time-container">')
+            fillTimeContainer(timeContainerBefore12, 'morning', date.formatDate(false))
+            before12.append(divHeaderbefore12, timeContainerBefore12)
+
+            var after12 = $('<div class="day-section opened">')
+            var divHeaderafter12 = $('<div class="header-section">')
+            var headerafter12 = $('<h5>День</h5>')
+            var arrowafter12 = $('<img class="arrow" src="../static/icons/open-arrow.svg">')
+            divHeaderafter12.append(headerafter12, arrowafter12)
+            divHeaderafter12.on('click', function (e) {
+                e.stopPropagation();
+                openSection(divHeaderafter12)
+            })
+            var timeContainerAfter12 = $('<div class="time-container">')
+            fillTimeContainer(timeContainerAfter12, 'day', date.formatDate(false))
+            
+            after12.append(divHeaderafter12, timeContainerAfter12)
+
+            var after18 = $('<div class="day-section opened">')
+            var divHeaderafter18 = $('<div class="header-section">')
+            var headerafter18 = $('<h5>Вечер</h5>')
+            var arrowafter18 = $('<img class="arrow" src="../static/icons/open-arrow.svg">')
+            divHeaderafter18.append(headerafter18, arrowafter18)
+            divHeaderafter18.on('click',  function (e) {
+                e.stopPropagation();
+                openSection(divHeaderafter18)
+            })
+            var timeContainerAfter18 = $('<div class="time-container">')
+            fillTimeContainer(timeContainerAfter18, 'evening', date.formatDate(false))
+
+            after18.append(divHeaderafter18, timeContainerAfter18)
+            timeContainer.append(before12, after12, after18)
+            var times = timeContainer.find('.time')
+            times.each(function () {
+                closedTimes.forEach(time => {
+                    if($(this).attr('data-time') >= time.start && $(this).attr('data-time') < time.end)
+                    $(this).addClass('closed-time')
+                });
+            })
+        })
     })
+
+    function fillTimeContainer(container, type, date) {
+        container.empty()
+        if(type == 'morning') {
+            var start = 9
+            while(start < 12) {
+                var time = $(`<div data-time="${start}" class="time">${String(start).includes('.') ? String(Math.trunc(start)) + ':30' : String(start) + ':00'}</div>`)
+                container.append(time)
+                time.on('click', function (e) {
+                    e.stopPropagation();
+                    picTime(date, $(this))
+                })   
+                start += 0.5
+            }
+        } else if(type == 'day') {
+            var start = 12
+            while(start < 18) {
+                var time = $(`<div data-time="${start}" class="time">${String(start).includes('.') ? String(Math.trunc(start)) + ':30' : String(start) + ':00'}</div>`)
+                container.append(time)
+                time.on('click', function (e) {
+                    e.stopPropagation();
+                    picTime(date, $(this))
+                })   
+                start += 0.5
+            }
+        } else {
+            var start = 18
+            while(start < 20) {
+                var time = $(`<div data-time="${start}" class="time">${String(start).includes('.') ? String(Math.trunc(start)) + ':30' : String(start) + ':00'}</div>`)
+                container.append(time)
+                time.on('click', function (e) {
+                    e.stopPropagation();
+                    picTime(date, $(this))
+                })            
+                start += 0.5
+            }
+        }
+    }
+
+    function picTime(date, time) {
+        var allTimes = $('#time-container').find('.time')
+        allTimes.each(function () {
+            $(this).removeClass('picked-time')    
+        })
+        time.addClass('picked-time')
+        addDateTimeToCart(date, time.attr('data-time'))
+    }
+
+    function addDateTimeToCart(date, time) {
+        updateCartBtn('Готово')
+        $('#cart').show()
+        final_cart["date"] = date
+        final_cart["time"] = time
+        console.log(final_cart)
+    }
+
+    function openSection(container) {
+        var parent = container.parent()
+        if(parent.hasClass('opened')) {
+            parent.css('max-height', '35px')
+            container.find('.arrow').css('transform', 'rotateX(360deg)')
+            parent.find('.time-container').hide()
+            parent.removeClass('opened')
+        }
+        else {
+            parent.css('max-height', '1000px')
+            container.find('.arrow').css('transform', 'rotateX(180deg)')
+            parent.find('.time-container').show()
+            parent.addClass('opened')
+        }
+    }
 });
