@@ -85,8 +85,36 @@
                         <div style="display:flex;flex-direction:column; margin-left: 7px;"><span class="result-date"></span><span
                                 class="result-time"></span></div>
                     </div>
+                    <div id="result-services">
+                        <div id="result-services-header">
+                            <span><strong>Услуги</strong></span>
+                            <span class="duration"></span>
+                        </div>
+                        <div id="result-services-container">
+
+                        </div>
+                    </div>
+                    <div id="result-services-total">
+                        <span>Итого</span>
+                        <span id="totalPrice"></span>
+                    </div>
                 </div>
             </div>
+            <form id="personal-form">
+                <div class="personal-header"><h5>Ваши данные</h5></div>
+                <div class="personal-form-row">
+                    <label for="form-name">Имя *</label>
+                    <input type="text" placeholder="Введите имя" id="form-name" required>
+                </div>
+                <div class="personal-form-row">
+                    <label for="form-phone">Телефон *</label>
+                    <input type="text" placeholder="+79226838883" id="form-phone" required>
+                </div>
+                <div class="personal-form-row">
+                    <label for="form-comment">Комментарий</label>
+                    <input type="text" placeholder="Комментарий к записи" id="form-comment">
+                </div>
+            </form>
         </div>
         <div id="cart" style="display: none;">
             <div id="cart-container">

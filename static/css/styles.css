@@ -271,3 +271,66 @@ h1, h2 {
 .picked-time {
     background-color: #a6d4e9;
 }
+
+#result-services {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid rgb(234, 238, 244);
+    padding: 7px 15px 15px 15px;
+    height: auto;
+    width: 100%;
+}
+
+#result-services-total {
+    display: flex;
+    align-items: center;
+    border-top: 1px solid rgb(234, 238, 244);
+    padding: 7px 15px 5px 15px;
+    height: 40px;
+    width: 100%;
+}
+
+#result-services-header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 40px;
+}
+
+#totalPrice {
+    margin-left: auto;
+    font-weight: bold;
+}
+
+#personal-form {
+    display: flex;
+    flex-direction: column;
+    padding: 7px 15px 15px 7px;
+    height: auto;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.personal-header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 30px;
+    margin: 0;
+}
+
+.personal-form-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 7px;
+}
+
+.personal-form-row input {
+    border: 1px solid rgb(234, 238, 244);
+    border-radius: 12px;
+}
+
+.personal-form-row input::placeholder {
+    opacity: 50%;
+    font-size: 12px;
+}

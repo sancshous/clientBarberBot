@@ -254,7 +254,7 @@ $(document).ready(function() {
 
     function updateCartBtn(text) {
         var btn = $('.cartBtn')
-        if(final_cart.hasOwnProperty('master') && final_cart.hasOwnProperty('service') && text != 'Готово')
+        if(final_cart.hasOwnProperty('master') && final_cart.hasOwnProperty('service') && text != 'Готово'  && text != 'Записаться')
             btn.text('Выбрать дату и время')
         else
             btn.text(text)
@@ -383,15 +383,48 @@ $(document).ready(function() {
         var date = resultContainer.find('.result-date')
         date.text(formatLocaleDate(final_cart.date))
         var totalDuration = 0;
+        var totalPriceNum = 0;
         final_cart.service.forEach(elem => {
             totalDuration += elem.duration;
+            totalPriceNum += elem.price;
         });
 
         var timeStr = final_cart.time.includes('.') ? String(Math.trunc(Number(final_cart.time))) + ':30' : final_cart.time + ':00';
         var endTime = String(Number(final_cart.time) + totalDuration / 60)
-        timeStr += endTime.includes('.') ? ' — ' + String(Math.trunc(Number(endTime))) + ':30' : ' — ' + endTime + ':00';
+        var endTimeStr = ''
+        if(endTime.includes('.')) {
+            if(endTime.includes('.25'))
+                endTimeStr = String(Math.trunc(Number(endTime))) + ':15'
+            else if(endTime.includes('.75'))
+                endTimeStr = String(Math.trunc(Number(endTime))) + ':45'
+            else
+                endTimeStr = String(Math.trunc(Number(endTime))) + ':30'
+        } else
+            endTimeStr = endTime + ':00'
+            
+        timeStr += ' — ' + endTimeStr;
         var time = resultContainer.find('.result-time')
         time.text(timeStr)
+        var durationServicesHeader = $('#result-services-header').find('.duration')
+        var strTime = totalDuration <= 60 ? `${totalDuration} мин.` : `${Math.trunc(totalDuration / 60)}ч. ${60 * ((totalDuration / 60) - Math.trunc(totalDuration / 60))} мин.`;
+            
+        durationServicesHeader.text(strTime)
+        var resultServicesContainer = $('#result-services-container')
+        resultServicesContainer.empty();
+        final_cart.service.forEach(elem => {
+            var row = $('<div style="display:flex; margin-bottom: 5px; align-items:center; width: 100%">');
+            var column = $('<div style="display:flex; flex-direction:column;">');
+            var nameSpan = $(`<span><strong>${elem.name}</strong></span>`);
+            var durationSpan = $(`<span class="duration">${elem.duration} мин</span>`);
+            column.append(nameSpan, durationSpan)
+            var divPrice = $('<div style="margin-left:auto;display:flex;align-items:center;">')
+            var totalPrice = $(`<span><strong>${elem.price} ₽</strong></span>`)
+            divPrice.append(totalPrice)
+            row.append(column, divPrice)
+            resultServicesContainer.append(row)
+        });
+        var totalPrice = $('#totalPrice')
+        totalPrice.text(String(totalPriceNum) + ' ₽')
     }
 
     function formatLocaleDate(datestring) {

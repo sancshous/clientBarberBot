@@ -1,0 +1,155 @@
+00:15:37 | Preparing environment
+00:15:37 | Creating base layer
+00:15:37 | Using existing image sha256:34333f737130e0c7bc6c92671f514e3d6c74dd07a75eb5a8ced8315e34057009
+00:15:37 | Building keys layer
+00:15:37 | DEBUG | Sending build context to Docker daemon  2.048kB
+00:15:37 | DEBUG | Step 1/7 : FROM sha256:34333f737130e0c7bc6c92671f514e3d6c74dd07a75eb5a8ced8315e34057009
+00:15:37 | DEBUG |  ---> 34333f737130
+00:15:37 | DEBUG | Step 2/7 : WORKDIR /opt/build
+00:15:37 | DEBUG |  ---> Running in f36706f4008b
+00:15:37 | DEBUG | Removing intermediate container f36706f4008b
+00:15:37 | DEBUG |  ---> aab73cbacbab
+00:15:37 | DEBUG | Step 3/7 : RUN mkdir -p /root/.ssh
+00:15:37 | DEBUG |  ---> Running in 7bcbaa6db19f
+00:15:38 | DEBUG | Removing intermediate container 7bcbaa6db19f
+00:15:38 | DEBUG |  ---> a5d64cfca1b0
+00:15:38 | DEBUG | Step 4/7 : RUN ssh-keyscan -t rsa github.com > /root/.ssh/known_hosts
+00:15:38 | DEBUG |  ---> Running in 6b4539895394
+00:15:38 | DEBUG | # github.com:22 SSH-2.0-babeld-64443082
+00:15:39 | DEBUG | Removing intermediate container 6b4539895394
+00:15:39 | DEBUG |  ---> 5a63bdb6147d
+00:15:39 | DEBUG | Step 5/7 : RUN ssh-keyscan -t rsa bitbucket.org >> /root/.ssh/known_hosts
+00:15:39 | DEBUG |  ---> Running in b88405a3d572
+00:15:39 | DEBUG | # bitbucket.org:22 SSH-2.0-conker_35e9915f7d d7095a9bccd0
+00:15:40 | DEBUG | Removing intermediate container b88405a3d572
+00:15:40 | DEBUG |  ---> 20cae8acdd73
+00:15:40 | DEBUG | Step 6/7 : RUN ssh-keyscan -t rsa gitlab.com >> /root/.ssh/known_hosts
+00:15:40 | DEBUG |  ---> Running in b1c3101200e2
+00:15:40 | DEBUG | # gitlab.com:22 SSH-2.0-GitLab-SSHD
+00:15:41 | DEBUG | Removing intermediate container b1c3101200e2
+00:15:41 | DEBUG |  ---> ed32bb514861
+00:15:41 | DEBUG | Step 7/7 : LABEL app_id=ced3f489-bf62-478d-a60a-e5d7f276222c
+00:15:41 | DEBUG |  ---> Running in 48f916c1853a
+00:15:41 | DEBUG | Removing intermediate container 48f916c1853a
+00:15:41 | DEBUG |  ---> 3a524145d3b6
+00:15:41 | DEBUG | Successfully built 3a524145d3b6
+00:15:41 | DEBUG | Successfully tagged final-image-ced3f489-bf62-478d-a60a-e5d7f276222c-keys:latest
+00:15:41 | Layer built successfully
+00:15:41 | Cloning code
+00:15:41 | Building code layer
+00:15:41 | DEBUG | Sending build context to Docker daemon  2.048kB
+00:15:41 | DEBUG | Step 1/7 : FROM 3a524145d3b6
+00:15:41 | DEBUG |  ---> 3a524145d3b6
+00:15:41 | DEBUG | Step 2/7 : WORKDIR /opt/build
+00:15:41 | DEBUG |  ---> Running in f6f90ff7826f
+00:15:41 | DEBUG | Removing intermediate container f6f90ff7826f
+00:15:41 | DEBUG |  ---> 9e5056549ec0
+00:15:41 | DEBUG | Step 3/7 : RUN git clone "https://github.com/sancshous/clientBarberBot.git" -b main /opt/build
+00:15:41 | DEBUG |  ---> Running in 141a5956a876
+00:15:41 | DEBUG | Cloning into '/opt/build'...
+00:15:42 | DEBUG | Removing intermediate container 141a5956a876
+00:15:42 | DEBUG |  ---> bf6a2f0132af
+00:15:42 | DEBUG | Step 4/7 : RUN cd /opt/build
+00:15:42 | DEBUG |  ---> Running in c17ea8e47f45
+00:15:43 | DEBUG | Removing intermediate container c17ea8e47f45
+00:15:43 | DEBUG |  ---> d814ad16eca8
+00:15:43 | DEBUG | Step 5/7 : RUN git remote rm origin
+00:15:43 | DEBUG |  ---> Running in daa975379231
+00:15:43 | DEBUG | Removing intermediate container daa975379231
+00:15:43 | DEBUG |  ---> 53a26c4d58d0
+00:15:43 | DEBUG | Step 6/7 : RUN git checkout 95a917cbdfb4fe8a83ebc67f4278432cf526b3ed
+00:15:43 | DEBUG |  ---> Running in 7c304ff92e53
+00:15:43 | DEBUG | Note: switching to '95a917cbdfb4fe8a83ebc67f4278432cf526b3ed'.
+00:15:43 | DEBUG | You are in 'detached HEAD' state. You can look around, make experimental
+00:15:43 | DEBUG | changes and commit them, and you can discard any commits you make in this
+00:15:43 | DEBUG | state without impacting any branches by switching back to a branch.
+00:15:43 | DEBUG | If you want to create a new branch to retain commits you create, you may
+00:15:43 | DEBUG | do so (now or later) by using -c with the switch command. Example:
+00:15:43 | DEBUG |   git switch -c <new-branch-name>
+00:15:43 | DEBUG | Or undo this operation with:
+00:15:43 | DEBUG |   git switch -
+00:15:43 | DEBUG | Turn off this advice by setting config variable advice.detachedHead to false
+00:15:43 | DEBUG | HEAD is now at 95a917c v0.7
+00:15:43 | DEBUG | Removing intermediate container 7c304ff92e53
+00:15:43 | DEBUG |  ---> 68850bf6cc32
+00:15:43 | DEBUG | Step 7/7 : LABEL app_id=ced3f489-bf62-478d-a60a-e5d7f276222c
+00:15:43 | DEBUG |  ---> Running in 15ebb29b0eec
+00:15:43 | DEBUG | Removing intermediate container 15ebb29b0eec
+00:15:43 | DEBUG |  ---> 9f8fdcf030e7
+00:15:43 | DEBUG | Successfully built 9f8fdcf030e7
+00:15:43 | DEBUG | Successfully tagged final-image-ced3f489-bf62-478d-a60a-e5d7f276222c-code:latest
+00:15:43 | Layer built successfully
+00:15:43 | Switching to commit 95a917cbdfb4fe8a83ebc67f4278432cf526b3ed
+00:15:44 | DEBUG | [".", "..", ".git", "app.py", "barbershop.db", "create_database.py", "static", "templates"]
+00:15:44 | Installing dependencies
+00:15:44 | Building dependencies layer
+00:15:44 | DEBUG | Sending build context to Docker daemon  2.048kB
+00:15:44 | DEBUG | Step 1/4 : FROM 9f8fdcf030e7
+00:15:44 | DEBUG |  ---> 9f8fdcf030e7
+00:15:44 | DEBUG | Step 2/4 : WORKDIR /opt/build
+00:15:44 | DEBUG |  ---> Running in 132278dd4376
+00:15:44 | DEBUG | Removing intermediate container 132278dd4376
+00:15:44 | DEBUG |  ---> e1c2789fd812
+00:15:44 | DEBUG | Step 3/4 : RUN pip3 install flask
+00:15:44 | DEBUG |  ---> Running in 96532ea6edbe
+00:15:45 | DEBUG | Collecting flask
+00:15:46 | DEBUG |   Downloading flask-3.0.3-py3-none-any.whl (101 kB)
+00:15:46 | DEBUG |      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 101.7/101.7 KB 1.7 MB/s eta 0:00:00
+00:15:46 | DEBUG | Collecting itsdangerous>=2.1.2
+00:15:46 | DEBUG |   Downloading itsdangerous-2.2.0-py3-none-any.whl (16 kB)
+00:15:46 | DEBUG | Collecting blinker>=1.6.2
+00:15:46 | DEBUG |   Downloading blinker-1.8.2-py3-none-any.whl (9.5 kB)
+00:15:46 | DEBUG | Collecting click>=8.1.3
+00:15:46 | DEBUG |   Downloading click-8.1.7-py3-none-any.whl (97 kB)
+00:15:46 | DEBUG |      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 97.9/97.9 KB 2.5 MB/s eta 0:00:00
+00:15:46 | DEBUG | Collecting Jinja2>=3.1.2
+00:15:46 | DEBUG |   Downloading jinja2-3.1.4-py3-none-any.whl (133 kB)
+00:15:46 | DEBUG |      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 133.3/133.3 KB 12.0 MB/s eta 0:00:00
+00:15:46 | DEBUG | Collecting Werkzeug>=3.0.0
+00:15:46 | DEBUG |   Downloading werkzeug-3.0.3-py3-none-any.whl (227 kB)
+00:15:46 | DEBUG |      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 227.3/227.3 KB 17.3 MB/s eta 0:00:00
+00:15:47 | DEBUG | Collecting MarkupSafe>=2.0
+00:15:47 | DEBUG |   Downloading MarkupSafe-2.1.5-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (25 kB)
+00:15:47 | DEBUG | Installing collected packages: MarkupSafe, itsdangerous, click, blinker, Werkzeug, Jinja2, flask
+00:15:47 | DEBUG |   Attempting uninstall: blinker
+00:15:47 | DEBUG |     Found existing installation: blinker 1.4
+00:15:47 | DEBUG |     Not uninstalling blinker at /usr/lib/python3/dist-packages, outside environment /usr
+00:15:47 | DEBUG |     Can't uninstall 'blinker'. No files were found to uninstall.
+00:15:47 | DEBUG | Successfully installed Jinja2-3.1.4 MarkupSafe-2.1.5 Werkzeug-3.0.3 blinker-1.8.2 click-8.1.7 flask-3.0.3 itsdangerous-2.2.0
+00:15:47 | DEBUG | WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+00:15:48 | DEBUG | Removing intermediate container 96532ea6edbe
+00:15:48 | DEBUG |  ---> 5940d87d86b4
+00:15:48 | DEBUG | Step 4/4 : LABEL app_id=ced3f489-bf62-478d-a60a-e5d7f276222c
+00:15:48 | DEBUG |  ---> Running in 86f7bce20234
+00:15:48 | DEBUG | Removing intermediate container 86f7bce20234
+00:15:48 | DEBUG |  ---> 8f097e04ae58
+00:15:48 | DEBUG | Successfully built 8f097e04ae58
+00:15:48 | DEBUG | Successfully tagged final-image-ced3f489-bf62-478d-a60a-e5d7f276222c-dependencies:latest
+00:15:48 | Layer built successfully
+00:15:48 | Building final layer
+00:15:48 | DEBUG | Sending build context to Docker daemon  2.048kB
+00:15:48 | DEBUG | Step 1/4 : FROM 8f097e04ae58
+00:15:48 | DEBUG |  ---> 8f097e04ae58
+00:15:48 | DEBUG | Step 2/4 : WORKDIR /opt/build
+00:15:48 | DEBUG |  ---> Running in 8e4d5ef92fbe
+00:15:48 | DEBUG | Removing intermediate container 8e4d5ef92fbe
+00:15:48 | DEBUG |  ---> a010a47bb878
+00:15:48 | DEBUG | Step 3/4 : RUN cd /opt/build
+00:15:48 | DEBUG |  ---> Running in 4d8af27a2914
+00:15:49 | DEBUG | Removing intermediate container 4d8af27a2914
+00:15:49 | DEBUG |  ---> 9125946d3c8f
+00:15:49 | DEBUG | Step 4/4 : LABEL app_id=ced3f489-bf62-478d-a60a-e5d7f276222c
+00:15:49 | DEBUG |  ---> Running in 99b495e6327b
+00:15:49 | DEBUG | Removing intermediate container 99b495e6327b
+00:15:49 | DEBUG |  ---> 80c0721858a5
+00:15:49 | DEBUG | Successfully built 80c0721858a5
+00:15:49 | DEBUG | Successfully tagged final-image-ced3f489-bf62-478d-a60a-e5d7f276222c-build:latest
+00:15:49 | Layer built successfully
+00:15:49 | Search for the port on which the application is running
+00:15:57 | App ports found: 8000
+00:15:57 | Running the container
+00:15:57 | Setting up nginx
+00:15:57 | Checking HTTP GET on found ports
+00:15:59 | App runs on domain sancshous-clientbarberbot-fbac.twc1.net
+00:15:59 | Cleaning up
+00:15:59 | Deployment successfully completed 🎉
