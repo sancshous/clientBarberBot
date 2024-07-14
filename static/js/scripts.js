@@ -44,7 +44,7 @@ $(document).ready(function() {
             position: "right", // `left`, `center` or `right`
             stopOnFocus: true, // Prevents dismissing of toast on hover
             style: {
-              background: "linear-gradient(to right, #00b09b, #96c93d)",
+              background: "linear-gradient(to right, #b0000f, #c93d3d)",
             }
           }).showToast();
     }
@@ -99,34 +99,16 @@ $(document).ready(function() {
         });
     }
 
-    function bookAppointment() {
-        const masterId = $('#masters').val();
-        const serviceId = $('#services').val();
-        const date = $('#dates').val();
-        const time = $('#times').val();
-        const clientName = $('#client-name').val();
-        const clientPhone = $('#client-phone').val();
+    function bookAppointment(callback) {
+        $.ajax({
+            url: '/book',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(final_cart),
+            success: function(response) {
 
-        if (masterId && serviceId && date && time && clientName && clientPhone) {
-            $.ajax({
-                url: '/book',
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    master_id: masterId,
-                    service_id: serviceId,
-                    date: date,
-                    time: time,
-                    client_name: clientName,
-                    client_phone: clientPhone
-                }),
-                success: function(response) {
-                    alert(response.message);
-                }
-            });
-        } else {
-            alert('Пожалуйста, заполните все поля.');
-        }
+            }
+        });
     }
 
     $('.back-arrow').on('click', function () {
@@ -476,7 +458,9 @@ $(document).ready(function() {
             final_cart["user_name"] = $('#form-name').val()
             final_cart["user_phone"] = $('#form-phone').val()
             final_cart["user_comment"] = $('#form-comment').val()
-            tg.sendData(JSON.stringify(final_cart));
+            bookAppointment(function () {
+                tg.sendData(JSON.stringify(final_cart));
+            })
         }    
     })
 

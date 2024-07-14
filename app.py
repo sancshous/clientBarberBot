@@ -63,19 +63,15 @@ def get_closed_times(date):
 
 @app.route('/book', methods=['POST'])
 def book_appointment():
-    data = request.get_json()
-    master_id = data['master_id']
-    service_id = data['service_id']
-    date = data['date']
-    time = data['time']
-    client_name = data['client_name']
-    client_phone = data['client_phone']
-
+    cart = request.get_json()
+    services = ''
+    for service in cart.service:
+        services += str(service.id) + ','
     conn = sqlite3.connect('barbershop.db')
     cur = conn.cursor()
-    cur.execute('''INSERT INTO appointments (master_id, service_id, date, time, client_name, client_phone)
+    cur.execute('''INSERT INTO appointments (master_id, services, date, time, user_name, user_phone, user_comment)
                    VALUES (?, ?, ?, ?, ?, ?)''',
-                (master_id, service_id, date, time, client_name, client_phone))
+                (cart.master.id, services, cart.date, cart.time, cart.user_name, cart.user_phone, cart.user_comment))
     conn.commit()
     conn.close()
 

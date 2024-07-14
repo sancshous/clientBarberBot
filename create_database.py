@@ -25,8 +25,9 @@ def create_db():
                         services TEXT NOT NULL,
                         date TEXT NOT NULL,
                         time REAL NOT NULL,
-                        client_name TEXT NOT NULL,
-                        client_phone TEXT NOT NULL,
+                        user_name TEXT NOT NULL,
+                        user_phone TEXT NOT NULL,
+                        user_comment TEXT,
                         FOREIGN KEY (master_id) REFERENCES masters(id))''')
 
     # Добавление тестовых данных
@@ -36,9 +37,9 @@ def create_db():
     cursor.executemany('''INSERT INTO services (id, name, price, duration, difficult) VALUES (?, ?, ?, ?, ?)''', 
                        [(1, 'Стрижка', 500, 60, 1), (2, 'Бритье', 300, 30, 2), (3, 'Укладка', 400, 45, 3)])
     
-    cursor.executemany('''INSERT INTO appointments (id, master_id, services, date, time, client_name, client_phone) VALUES (?, ?, ?, ?, ?, ?, ?)''', 
-                       [(1, 1, '1,2', '2024-07-13', 13, 'Александр', '89226838883'), 
-                        (2, 2, '2', '2024-07-13', 13.5, 'Александр', '89226838883')])
+    cursor.executemany('''INSERT INTO appointments (id, master_id, services, date, time, user_name, user_phone) VALUES (?, ?, ?, ?, ?, ?, ?)''', 
+                       [(1, 1, '1,2', '2024-07-14', 18, 'Александр', '89226838883'), 
+                        (2, 2, '2', '2024-07-14', 18.5, 'Александр', '89226838883')])
 
     conn.commit()
     conn.close()
