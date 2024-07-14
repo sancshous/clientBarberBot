@@ -70,7 +70,7 @@ def book_appointment():
     conn = sqlite3.connect('barbershop.db')
     cur = conn.cursor()
     cur.execute('''INSERT INTO appointments (master_id, services, date, time, user_name, user_phone, user_comment)
-                   VALUES (?, ?, ?, ?, ?, ?)''',
+                   VALUES (?, ?, ?, ?, ?, ?, ?)''',
                 (cart["master"]["id"], services, cart["date"], cart["time"], cart["user_name"], cart["user_phone"], cart["user_comment"]))
     conn.commit()
     conn.close()
