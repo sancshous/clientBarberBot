@@ -28,6 +28,20 @@ $(document).ready(function() {
         return asArray ? [year, month, day] : [year, month, day].join('-');
     }
 
+    function showMessage(message) {
+        Toastify({
+            text: message,
+            duration: 3000,
+            close: true,
+            gravity: "bottom", // `top` or `bottom`
+            position: "right", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+              background: "linear-gradient(to right, #00b09b, #96c93d)",
+            }
+          }).showToast();
+    }
+
     function fetchMasters(callback) {
         $.ajax({
             url: '/masters',
@@ -444,10 +458,28 @@ $(document).ready(function() {
         return result;
     }
 
+    Telegram.WebApp.onEvent("mainButtonClicked", function(){
+        if($('#form-name').val() == '' && $('#form-phone').val() == '')
+            showMessage('Заполните: Имя и Телефон!')
+        else if($('#form-name').val() == '')
+            showMessage('Заполните: Имя!')
+        else if($('#form-phone').val() == '')
+            showMessage('Заполните: Телефон!')
+        else {
+            final_cart["user_name"] = $('#form-name').val()
+            final_cart["user_phone"] = $('#form-phone').val()
+            final_cart["user_comment"] = $('#form-comment').val()
+            tg.sendData(JSON.stringify(final_cart));
+        }    
+    })
+
+
     $('.cartBtn').on('click', function () {
         if(final_cart.hasOwnProperty('date')) {
             $('#result-form').show()
-            updateCartBtn('Записаться')
+            $('#cart').hide()
+            tg.MainButton.setText("Записаться")
+		    tg.MainButton.show();
             showResult()
             $('#dates-form').hide();
         } else if(final_cart.hasOwnProperty('master') && final_cart.hasOwnProperty('service')) {
