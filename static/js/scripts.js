@@ -106,7 +106,7 @@ $(document).ready(function() {
             contentType: 'application/json',
             data: JSON.stringify(final_cart),
             success: function(response) {
-
+                callback();
             }
         });
     }
@@ -466,8 +466,16 @@ $(document).ready(function() {
 
 
     $('.cartBtn').on('click', function () {
-        if(final_cart.hasOwnProperty('date')) {
+        /*if($(this).text() == "Записаться") {
+            final_cart["user_name"] = $('#form-name').val()
+            final_cart["user_phone"] = $('#form-phone').val()
+            final_cart["user_comment"] = $('#form-comment').val()
+            bookAppointment(function () {
+                console.log('Пиривет')
+            })
+        } else */ if(final_cart.hasOwnProperty('date')) {
             $('#result-form').show()
+            //updateCartBtn('Записаться')
             $('#cart').hide()
             tg.MainButton.setText("Записаться")
 		    tg.MainButton.show();

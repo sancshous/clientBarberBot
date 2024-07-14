@@ -67,11 +67,13 @@ def book_appointment():
     services = ''
     for service in cart["service"]:
         services += str(service["id"]) + ','
+    services = services.rstrip(',')
+    
     conn = sqlite3.connect('barbershop.db')
     cur = conn.cursor()
-    cur.execute('''INSERT INTO appointments (master_id, services, date, time, user_name, user_phone, user_comment)
-                   VALUES (?, ?, ?, ?, ?, ?, ?)''',
-                (cart["master"]["id"], services, cart["date"], cart["time"], cart["user_name"], cart["user_phone"], cart["user_comment"]))
+    query = f'''INSERT INTO appointments (master_id, services, date, time, user_name, user_phone, user_comment) 
+        VALUES ({cart["master"]["id"]}, '{services}', '{cart["date"]}', {cart["time"]}, '{cart["user_name"]}', '{cart["user_phone"]}', '{cart["user_comment"]}')'''
+    cur.execute(query)
     conn.commit()
     conn.close()
 
