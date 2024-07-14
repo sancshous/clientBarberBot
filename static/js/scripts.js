@@ -1,6 +1,13 @@
 // static/scripts.js
 $(document).ready(function() {
 
+    let tg = window.Telegram.WebApp;
+
+    tg.expand();
+
+    tg.MainButton.textColor = '#FFFFFF';
+    tg.MainButton.color = '#2cab37';
+
     let masters = [];
     let services = [];
     let masters_difficult = []
