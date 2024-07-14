@@ -408,6 +408,7 @@ $(document).ready(function() {
         timeStr += ' — ' + endTimeStr;
         var time = resultContainer.find('.result-time')
         time.text(timeStr)
+        final_cart["end_time"] = endTimeStr
         var durationServicesHeader = $('#result-services-header').find('.duration')
         var strTime = totalDuration <= 60 ? `${totalDuration} мин.` : `${Math.trunc(totalDuration / 60)}ч. ${60 * ((totalDuration / 60) - Math.trunc(totalDuration / 60))} мин.`;
             
