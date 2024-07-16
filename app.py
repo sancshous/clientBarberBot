@@ -77,7 +77,7 @@ def cancel_book(user_id, book_id):
     if result != None:
         query = f"update appointments set is_close = 1 where id = {book_id}"
         cur.execute(query)
-        cur.commit()
+        conn.commit()
         cur.execute("select id, name from services")
         names_services = [{'id': row[0], 'name': row[1]} for row in cur.fetchall()]
         query = f'''SELECT a.id, m.name, a.services, a.date, a.time, a.user_name, a.user_phone, a.user_comment FROM appointments a join
