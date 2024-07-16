@@ -39,7 +39,7 @@ def get_masters_difficult(pos_id):
     return jsonify(masters_difficult)
 
 @app.route('/get_record/<user_id>', methods=['GET'])
-def get_masters_difficult(user_id):
+def get_record(user_id):
     conn = sqlite3.connect('barbershop.db')
     cur = conn.cursor()
     query = f"UPDATE appointments SET is_close = 1 WHERE user_id = '{user_id}' and date < DATE('now');"
