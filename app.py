@@ -74,15 +74,15 @@ def cancel_book(user_id, book_id):
     query = f"select * from appointments where user_id = {user_id} and id = {book_id}"
     cur.execute(query)
     result = cur.fetchall()
-    print(result)
-    if result != None:
+    if len(result) != 0:
         query = f"update appointments set is_close = 1 where id = {book_id}"
         cur.execute(query)
         conn.commit()
         cur.execute("select id, name from services")
         names_services = [{'id': row[0], 'name': row[1]} for row in cur.fetchall()]
         query = f'''SELECT a.id, m.name, a.services, a.date, a.time, a.user_name, a.user_phone, a.user_comment FROM appointments a join
-            masters m on a.master_id = m.id where id = {book_id}'''
+            masters m on a.master_id = m.id where a.id = {book_id}'''
+        cur.execute(query)
         appointments = cur.fetchall()
         conn.close()
         user_appointments = []
