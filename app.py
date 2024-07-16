@@ -77,7 +77,7 @@ def cancel_book(user_id, book_id):
     if len(result) != 0:
         cur.execute("select id, name from services")
         names_services = [{'id': row[0], 'name': row[1]} for row in cur.fetchall()]
-        query = f'''SELECT a.id, m.name, a.services, a.date, a.time, a.user_name, a.user_phone, a.user_comment FROM appointments a join
+        query = f'''SELECT a.id, m.name, a.services, a.date, a.time, a.user_name, a.user_phone, a.user_comment, a.eventId FROM appointments a join
             masters m on a.master_id = m.id where a.id = {book_id}'''
         cur.execute(query)
         appointments = cur.fetchall()
@@ -92,7 +92,7 @@ def cancel_book(user_id, book_id):
             serviceName = serviceName.rstrip(', ')
             user_appointments.append({'id': row[0], 'master': row[1], 'services': serviceName,
                             'date': row[3], 'time': row[4], 'user_name': row[5], 'user_phone': row[6],
-                            'user_comment': row[7]} ) 
+                            'user_comment': row[7], 'eventId': row[8]} ) 
 
         query = f"update appointments set is_close = 1 where id = {book_id}"
         cur.execute(query)
@@ -135,14 +135,36 @@ def book_appointment():
     
     conn = sqlite3.connect('barbershop.db')
     cur = conn.cursor()
-    query = f'''INSERT INTO appointments (master_id, services, date, time, user_id, user_name, user_phone, user_comment) 
-        VALUES ({cart["master"]["id"]}, '{services}', '{cart["date"]}', {cart["time"]}, '881822879', '{cart["user_name"]}', '{cart["user_phone"]}', '{cart["user_comment"]}')'''
+    query = f'''INSERT INTO appointments (master_id, services, date, time, user_name, user_phone, user_comment) 
+        VALUES ({cart["master"]["id"]}, '{services}', '{cart["date"]}', {cart["time"]}, '{cart["user_name"]}', '{cart["user_phone"]}', '{cart["user_comment"]}')'''
     cur.execute(query)
     book_id = cur.lastrowid
     conn.commit()
     conn.close()
 
     return jsonify([book_id]), 200
+
+@app.route('/add_userId/<book_id>/<user_id>', methods=['POST'])
+def add_userId(book_id, user_id):
+    conn = sqlite3.connect('barbershop.db')
+    cur = conn.cursor()
+    query = f"update appointments set user_id = '{user_id}' where id = {book_id}"
+    cur.execute(query)
+    conn.commit()
+    conn.close()
+
+    return "SUCCESS", 200
+
+@app.route('/add_eventId/<book_id>/<eventId>', methods=['POST'])
+def add_eventId(book_id, eventId):
+    conn = sqlite3.connect('barbershop.db')
+    cur = conn.cursor()
+    query = f"update appointments set eventId = '{eventId}' where id = {book_id}"
+    cur.execute(query)
+    conn.commit()
+    conn.close()
+
+    return "SUCCESS", 200
 
 if __name__ == "__main__":
     app.run(debug=True)

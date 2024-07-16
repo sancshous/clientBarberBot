@@ -25,11 +25,12 @@ def create_db():
                         services TEXT NOT NULL,
                         date TEXT NOT NULL,
                         time REAL NOT NULL,
-                        user_id TEXT NOT NULL,
+                        user_id TEXT,
                         user_name TEXT NOT NULL,
                         user_phone TEXT NOT NULL,
                         user_comment TEXT,
                         is_close NUMERIC DEFAULT 0 NOT NULL,
+                        eventId TEXT,
                         FOREIGN KEY (master_id) REFERENCES masters(id))''')
 
     # Добавление тестовых данных
