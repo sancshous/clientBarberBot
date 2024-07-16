@@ -74,6 +74,7 @@ def cancel_book(user_id, book_id):
     query = f"select * from appointments where user_id = {user_id} and id = {book_id}"
     cur.execute(query)
     result = cur.fetchall()
+    print(result)
     if result != None:
         query = f"update appointments set is_close = 1 where id = {book_id}"
         cur.execute(query)
