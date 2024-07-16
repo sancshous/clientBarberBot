@@ -67,8 +67,39 @@ def get_record(user_id):
 
     return jsonify(user_appointments)
 
-#@app.route('/cancel_book/<user_id>/<book_id>', methods=['POST'])
-#def cancel_book(user_id, book_id):
+@app.route('/cancel_book/<user_id>/<book_id>', methods=['POST'])
+def cancel_book(user_id, book_id):
+    conn = sqlite3.connect('barbershop.db')
+    cur = conn.cursor()
+    query = f"select * from appointments where user_id = {user_id} and id = {book_id}"
+    cur.execute(query)
+    result = cur.fetchall()
+    if result != None:
+        query = f"update appointments set is_close = 1 where id = {book_id}"
+        cur.execute(query)
+        cur.commit()
+        cur.execute("select id, name from services")
+        names_services = [{'id': row[0], 'name': row[1]} for row in cur.fetchall()]
+        query = f'''SELECT a.id, m.name, a.services, a.date, a.time, a.user_name, a.user_phone, a.user_comment FROM appointments a join
+            masters m on a.master_id = m.id where id = {book_id}'''
+        appointments = cur.fetchall()
+        conn.close()
+        user_appointments = []
+        for row in appointments:
+            serviceName = ''
+            service_arr = row[2].split(',')
+            for service in service_arr:
+                for name in names_services:
+                    if name["id"] == int(service):
+                        serviceName += name["name"] + ', '
+            serviceName = serviceName.rstrip(', ')
+            user_appointments.append({'id': row[0], 'master': row[1], 'services': serviceName,
+                            'date': row[3], 'time': row[4], 'user_name': row[5], 'user_phone': row[6],
+                            'user_comment': row[7]} ) 
+
+        return jsonify(user_appointments)
+    else:
+        return jsonify(["NOROWS"]), 200
 
 @app.route('/closed-times/<date>', methods=['GET'])
 def get_closed_times(date):
