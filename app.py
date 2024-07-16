@@ -110,7 +110,7 @@ def get_closed_times(date):
     cur = conn.cursor()
     cur.execute("select id, duration from services")
     duration_services = [{'id': row[0], 'duration': row[1]} for row in cur.fetchall()]
-    cur.execute('SELECT time, services FROM appointments WHERE master_id = ? AND date = ?', (master_id, date))
+    cur.execute('SELECT time, services FROM appointments WHERE is_close = 0 and master_id = ? AND date = ?', (master_id, date))
     times = cur.fetchall()
     closed_times = []
     for row in times:
