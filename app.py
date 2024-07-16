@@ -71,7 +71,7 @@ def get_record(user_id):
 def cancel_book(user_id, book_id):
     conn = sqlite3.connect('barbershop.db')
     cur = conn.cursor()
-    query = f"select * from appointments where user_id = {user_id} and id = {book_id}"
+    query = f"select * from appointments where user_id = {user_id} and id = {book_id} and is_close = 0"
     cur.execute(query)
     result = cur.fetchall()
     if len(result) != 0:
