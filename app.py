@@ -45,12 +45,24 @@ def get_record(user_id):
     query = f"UPDATE appointments SET is_close = 1 WHERE user_id = '{user_id}' and date < DATE('now');"
     cur.execute(query)
     conn.commit()
-    query = f"SELECT * FROM appointments where user_id = '{user_id}' and is_close = 0"
+    cur.execute("select id, name from services")
+    names_services = [{'id': row[0], 'name': row[1]} for row in cur.fetchall()]
+    query = f"""SELECT m.name, a.services, a.date, a.time, a.user_name, a.user_phone, a.user_comment FROM appointments a join
+    masters m on a.master_id = m.id where user_id = '{user_id}' and is_close = 0"""
     cur.execute(query)
-    user_appointments = [{'id': row[0], 'master_id': row[1], 'services': row[2],
-                          'date': row[3], 'time': row[4], 'user_name': row[5], 'user_phone': row[6],
-                          'user_comment': row[7]} 
-                         for row in cur.fetchall()]
+    appointments = cur.fetchall()
+    user_appointments = []
+    for row in appointments:
+        serviceName = ''
+        service_arr = row[1].split(',')
+        for service in service_arr:
+            for name in names_services:
+                if name["id"] == int(service):
+                    serviceName += name["name"] + ', '
+        serviceName = serviceName.rstrip(', ')
+        user_appointments.append({'master': row[0], 'services': serviceName,
+                          'date': row[2], 'time': row[3], 'user_name': row[4], 'user_phone': row[5],
+                          'user_comment': row[6]} ) 
 
     return jsonify(user_appointments)
 
