@@ -135,13 +135,14 @@ def book_appointment():
     
     conn = sqlite3.connect('barbershop.db')
     cur = conn.cursor()
-    query = f'''INSERT INTO appointments (master_id, services, date, time, user_name, user_phone, user_comment) 
-        VALUES ({cart["master"]["id"]}, '{services}', '{cart["date"]}', {cart["time"]}, '{cart["user_name"]}', '{cart["user_phone"]}', '{cart["user_comment"]}')'''
+    query = f'''INSERT INTO appointments (master_id, services, date, time, user_id, user_name, user_phone, user_comment) 
+        VALUES ({cart["master"]["id"]}, '{services}', '{cart["date"]}', {cart["time"]}, '881822879', '{cart["user_name"]}', '{cart["user_phone"]}', '{cart["user_comment"]}')'''
     cur.execute(query)
+    book_id = cur.lastrowid
     conn.commit()
     conn.close()
 
-    return jsonify({"message": "Appointment booked successfully"}), 200
+    return jsonify([book_id]), 200
 
 if __name__ == "__main__":
     app.run(debug=True)

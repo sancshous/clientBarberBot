@@ -14,6 +14,7 @@ $(document).ready(function() {
     let closedTimes = [];
     let cart_services = [];
     let final_cart = {};
+    let BOOK_ID;
 
     if (window.matchMedia("(min-width: 768px)").matches) {
         $.bsCalendar.setDefault('width', '400px');
@@ -106,6 +107,7 @@ $(document).ready(function() {
             contentType: 'application/json',
             data: JSON.stringify(final_cart),
             success: function(response) {
+                BOOK_ID = response[0]
                 callback();
             }
         });
@@ -460,6 +462,7 @@ $(document).ready(function() {
             final_cart["user_phone"] = $('#form-phone').val()
             final_cart["user_comment"] = $('#form-comment').val()
             bookAppointment(function () {
+                final_cart["book_id"] = BOOK_ID;
                 tg.sendData(JSON.stringify(final_cart));
             })
         }    
