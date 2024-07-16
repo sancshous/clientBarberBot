@@ -35,7 +35,7 @@ def get_masters_difficult(pos_id):
     cur = conn.cursor()
     cur.execute('SELECT id, name, difficult FROM services where difficult >= ?', (pos_id))
     masters_difficult = [{'id': row[0], 'name': row[1], 'difficult': row[2]} for row in cur.fetchall()]
-
+    conn.close()
     return jsonify(masters_difficult)
 
 @app.route('/get_record/<user_id>', methods=['GET'])
@@ -47,24 +47,28 @@ def get_record(user_id):
     conn.commit()
     cur.execute("select id, name from services")
     names_services = [{'id': row[0], 'name': row[1]} for row in cur.fetchall()]
-    query = f"""SELECT m.name, a.services, a.date, a.time, a.user_name, a.user_phone, a.user_comment FROM appointments a join
+    query = f"""SELECT a.id, m.name, a.services, a.date, a.time, a.user_name, a.user_phone, a.user_comment FROM appointments a join
     masters m on a.master_id = m.id where user_id = '{user_id}' and is_close = 0"""
     cur.execute(query)
     appointments = cur.fetchall()
+    conn.close()
     user_appointments = []
     for row in appointments:
         serviceName = ''
-        service_arr = row[1].split(',')
+        service_arr = row[2].split(',')
         for service in service_arr:
             for name in names_services:
                 if name["id"] == int(service):
                     serviceName += name["name"] + ', '
         serviceName = serviceName.rstrip(', ')
-        user_appointments.append({'master': row[0], 'services': serviceName,
-                          'date': row[2], 'time': row[3], 'user_name': row[4], 'user_phone': row[5],
-                          'user_comment': row[6]} ) 
+        user_appointments.append({'id': row[0], 'master': row[1], 'services': serviceName,
+                          'date': row[3], 'time': row[4], 'user_name': row[5], 'user_phone': row[6],
+                          'user_comment': row[7]} ) 
 
     return jsonify(user_appointments)
+
+#@app.route('/cancel_book/<user_id>/<book_id>', methods=['POST'])
+#def cancel_book(user_id, book_id):
 
 @app.route('/closed-times/<date>', methods=['GET'])
 def get_closed_times(date):
