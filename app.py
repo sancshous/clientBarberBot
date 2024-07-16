@@ -38,6 +38,21 @@ def get_masters_difficult(pos_id):
 
     return jsonify(masters_difficult)
 
+@app.route('/get_record/<user_id>', methods=['GET'])
+def get_masters_difficult(user_id):
+    conn = sqlite3.connect('barbershop.db')
+    cur = conn.cursor()
+    query = f"UPDATE appointments SET is_close = 1 WHERE user_id = '{user_id}' and date < DATE('now');"
+    cur.execute(query)
+    conn.commit()
+    cur.execute('SELECT * FROM appointments where user_id = ? and is_close = 0', (user_id))
+    user_appointments = [{'id': row[0], 'master_id': row[1], 'services': row[2],
+                          'date': row[3], 'time': row[4], 'user_name': row[5], 'user_phone': row[6],
+                          'user_comment': row[7]} 
+                         for row in cur.fetchall()]
+
+    return jsonify(user_appointments)
+
 @app.route('/closed-times/<date>', methods=['GET'])
 def get_closed_times(date):
     master_id = request.args.get('master_id')
