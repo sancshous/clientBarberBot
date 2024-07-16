@@ -67,7 +67,7 @@ def get_record(user_id):
 
     return jsonify(user_appointments)
 
-@app.route('/cancel_book/<user_id>/<book_id>', methods=['POST'])
+@app.route('/cancel_book/<user_id>/<book_id>', methods=['GET'])
 def cancel_book(user_id, book_id):
     conn = sqlite3.connect('barbershop.db')
     cur = conn.cursor()
