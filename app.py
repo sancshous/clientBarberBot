@@ -105,25 +105,50 @@ def cancel_book(user_id, book_id):
 @app.route('/closed-times/<date>', methods=['GET'])
 def get_closed_times(date):
     master_id = request.args.get('master_id')
+    max_difficlt = request.args.get('max_difficlt')
 
     conn = sqlite3.connect('barbershop.db')
     cur = conn.cursor()
     cur.execute("select id, duration from services")
     duration_services = [{'id': row[0], 'duration': row[1]} for row in cur.fetchall()]
-    cur.execute('SELECT time, services FROM appointments WHERE is_close = 0 and master_id = ? AND date = ?', (master_id, date))
-    times = cur.fetchall()
-    closed_times = []
-    for row in times:
-        totalDuration = 0
-        service_arr = row[1].split(',')
-        for service in service_arr:
-            for duration in duration_services:
-                if duration["id"] == int(service):
-                    totalDuration += duration["duration"]
-        closed_times.append({'start' : row[0], 'end' : row[0] + totalDuration / 60}) 
-    conn.close()
-    
-    return jsonify(closed_times)
+    if master_id == '0':
+        query = f"select * from masters where pos_id <= {max_difficlt}"
+        cur.execute(query)
+        masters = cur.fetchall()
+        closed_masters = []
+        for master in masters:
+            query = f"SELECT time, services FROM appointments WHERE master_id = {master[0]} and is_close = 0 AND date = '{date}'"
+            cur.execute(query)
+            times = cur.fetchall()
+            if len(times) != 0:
+                closed_times = []
+                for row in times:
+                    totalDuration = 0
+                    service_arr = row[1].split(',')
+                    for service in service_arr:
+                        for duration in duration_services:
+                            if duration["id"] == int(service):
+                                totalDuration += duration["duration"]
+                    closed_times.append({'start' : row[0], 'end' : row[0] + totalDuration / 60})
+                    closed_masters.append({master[0] : closed_times}) 
+            else:
+                closed_masters.append('СВОБОДНО') 
+        conn.close()
+        return jsonify(closed_masters)
+    else:
+        cur.execute('SELECT time, services FROM appointments WHERE is_close = 0 and master_id = ? AND date = ?', (master_id, date))
+        times = cur.fetchall()
+        closed_times = []
+        for row in times:
+            totalDuration = 0
+            service_arr = row[1].split(',')
+            for service in service_arr:
+                for duration in duration_services:
+                    if duration["id"] == int(service):
+                        totalDuration += duration["duration"]
+            closed_times.append({'start' : row[0], 'end' : row[0] + totalDuration / 60}) 
+        conn.close()
+        return jsonify(closed_times)
 
 @app.route('/book', methods=['POST'])
 def book_appointment():

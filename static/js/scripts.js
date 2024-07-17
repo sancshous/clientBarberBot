@@ -87,11 +87,16 @@ $(document).ready(function() {
     }
 
     function fetchClosedTimes(date, callback) {
-        const masterId = final_cart.master.id;
+        var masterId = -1;
+        var maxDifficlt = -1;
+        if(final_cart.hasOwnProperty('master')) {
+            masterId = final_cart.master.id;
+            maxDifficlt = Math.min(...final_cart.service.map(o => o.difficult))
+        }
         $.ajax({
             url: `/closed-times/${date}`,
             method: 'GET',
-            data: { master_id: masterId },
+            data: { master_id: masterId, max_difficlt: maxDifficlt },
             success: function(data) {
                 closedTimes = []
                 closedTimes = data;
@@ -274,7 +279,7 @@ $(document).ready(function() {
             servicesContainer.empty();
             var counter = 0;
             var filteredServices = services;
-            if(final_cart.hasOwnProperty('master'))
+            if(final_cart.hasOwnProperty('master') && final_cart["master"]["id"] != 0)
                 filteredServices = services.filter(elem => elem.difficult >= final_cart.master.pos_id)
             filteredServices.forEach(service => {
                 var div = $(`<div class="form-row" data-id="${service.id}">`);
@@ -382,8 +387,8 @@ $(document).ready(function() {
         var resultContainer = $('#result-container')
         var master = resultContainer.find('.master-name')
         var pos = resultContainer.find('.pos')
-        master.text(final_cart.master.name)
-        pos.text(final_cart.master.pos_name)
+        master.text(final_cart.master.id == 0 ? 'Любой специалист' : final_cart.master.name)
+        pos.text(final_cart.master.id == 0 ? '' : final_cart.master.pos_name)
 
         var date = resultContainer.find('.result-date')
         date.text(formatLocaleDate(final_cart.date))
@@ -470,17 +475,17 @@ $(document).ready(function() {
 
 
     $('.cartBtn').on('click', function () {
-        /*if($(this).text() == "Записаться") {
+        if($(this).text() == "Записаться") {
             final_cart["user_name"] = $('#form-name').val()
             final_cart["user_phone"] = $('#form-phone').val()
             final_cart["user_comment"] = $('#form-comment').val()
             bookAppointment(function () {
                 console.log('Пиривет')
             })
-        } else */ if(final_cart.hasOwnProperty('date')) {
+        } else if(final_cart.hasOwnProperty('date')) {
             $('#result-form').show()
-            //updateCartBtn('Записаться')
-            $('#cart').hide()
+            updateCartBtn('Записаться')
+            //$('#cart').hide()
             tg.MainButton.setText("Записаться")
 		    tg.MainButton.show();
             showResult()
@@ -594,15 +599,66 @@ $(document).ready(function() {
 
             after18.append(divHeaderafter18, timeContainerAfter18)
             timeContainer.append(before12, after12, after18)
+            
             var times = timeContainer.find('.time')
-            times.each(function () {
-                closedTimes.forEach(time => {
-                    if($(this).attr('data-time') >= time.start && $(this).attr('data-time') < time.end)
-                    $(this).addClass('closed-time')
-                });
-            })
+            var totalDuration = 0;
+            final_cart.service.forEach(elem => {
+                totalDuration += elem.duration
+            });
+            var freeMaster = closedTimes.find(elem => elem == "СВОБОДНО")
+            if(!freeMaster) {
+                times.each(function () {
+                    var data_time = Number($(this).attr('data-time'))
+                    closedTimes.forEach(time => {
+                        Object.keys(time).map(key => {
+                            if(Array.isArray(time[key])) {
+                                const overlaps = findOverlappingIntervals(closedTimes);
+                                overlaps.forEach(overlap => {
+                                    if(data_time + (totalDuration / 60) > overlap.start && data_time < overlap.end)
+                                        $(this).addClass('closed-time')    
+                                });
+                            } else {
+                                if(data_time + (totalDuration / 60) > time.start && data_time < time.end)
+                                    $(this).addClass('closed-time')
+                            }
+                        })
+                    });
+                })
+            }
         })
     })
+
+    function findOverlappingIntervals(closedTimes) {
+        let overlaps = [];
+        // Collect all intervals from all objects
+        let allIntervals = [];
+        closedTimes.forEach(obj => {
+            Object.values(obj).forEach(intervals => {
+                allIntervals.push(...intervals);
+            });
+        });
+        
+        if(closedTimes.length == 1) {
+            allIntervals.forEach(interval => {
+                overlaps.push({ start: interval.start, end: interval.end });
+            });
+        }
+        else {
+            // Compare each interval with every other interval
+            for (let i = 0; i < allIntervals.length; i++) {
+                for (let j = i + 1; j < allIntervals.length; j++) {
+                    let start = Math.max(allIntervals[i].start, allIntervals[j].start);
+                    let end = Math.min(allIntervals[i].end, allIntervals[j].end);
+        
+                    if (start < end) {
+                        overlaps.push({ start: start, end: end });
+                    }
+                }
+            }
+        }
+    
+        return overlaps;
+    }
 
     function fillTimeContainer(container, type, date) {
         container.empty()
