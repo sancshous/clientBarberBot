@@ -475,17 +475,17 @@ $(document).ready(function() {
 
 
     $('.cartBtn').on('click', function () {
-        if($(this).text() == "Записаться") {
+        /*if($(this).text() == "Записаться") {
             final_cart["user_name"] = $('#form-name').val()
             final_cart["user_phone"] = $('#form-phone').val()
             final_cart["user_comment"] = $('#form-comment').val()
             bookAppointment(function () {
                 console.log('Пиривет')
             })
-        } else if(final_cart.hasOwnProperty('date')) {
+        } else*/ if(final_cart.hasOwnProperty('date')) {
             $('#result-form').show()
-            updateCartBtn('Записаться')
-            //$('#cart').hide()
+            //updateCartBtn('Записаться')
+            $('#cart').hide()
             tg.MainButton.setText("Записаться")
 		    tg.MainButton.show();
             showResult()
@@ -495,6 +495,7 @@ $(document).ready(function() {
             $('#masters-form').hide();
             $('#services-form').hide();
             $('#cart').hide();
+            $('#cart-container').remove()
             $('.js-today').trigger('click')
         } else if(final_cart.hasOwnProperty('master')) {
             updateCartBtn('Выбрать дату и время')
@@ -709,7 +710,10 @@ $(document).ready(function() {
 
     function addDateTimeToCart(date, time) {
         updateCartBtn('Готово')
-        $('#cart').show()
+        var cart = $('#cart')
+        cart.show()
+        cart.css('position', 'inherit')
+        cart.css('transform', 'none')
         final_cart["date"] = date
         final_cart["time"] = time
         console.log(final_cart)
