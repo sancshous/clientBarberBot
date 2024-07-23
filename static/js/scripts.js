@@ -7,6 +7,8 @@ $(document).ready(function() {
 
     tg.MainButton.textColor = '#FFFFFF';
     tg.MainButton.color = '#2cab37';
+    tg.MainButton.setParams({"font-weight": "bold"});
+
 
     let masters = [];
     let services = [];
@@ -553,6 +555,11 @@ $(document).ready(function() {
         onClickDeleteEvent: function (e, event) {
         },
     });
+
+    $('#form-phone').on('focus', function () {
+        if(!$(this).val().startsWith('+7'))
+            $(this).val('+7')
+    })
 
     $('#example').on('change-day', function (e, date, events) {
         fetchClosedTimes(date.formatDate(false), function () {
