@@ -470,7 +470,8 @@ $(document).ready(function() {
             final_cart["user_comment"] = $('#form-comment').val()
             bookAppointment(function () {
                 final_cart["book_id"] = BOOK_ID;
-                tg.sendData(JSON.stringify(final_cart));
+                //tg.sendData(JSON.stringify(final_cart));
+                tg.close();
             })
         }    
     })
