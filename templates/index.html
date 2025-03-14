@@ -31,103 +31,23 @@
 
 <body>
     <div class="main-container">
-        <div class="header">
-            <div style="display: none;" class="svg-container back-arrow"><img src="../static/icons/back.svg"></div>
-            <h2>BarberShop</h2>
+        <div class="d-flex align-items-center">
+            <label>Партнер 1</label>
+            <img src="/static/icons/men.svg">
+            <input type="date" id="menDate" class="ms-3" style="border-radius: 8px;">
+            <input type="time" id="menTime" class="ms-2" style="border-radius: 8px;">
         </div>
-        <div id="home-form">
-            <div id="picMaster" class="home-row">
-                <div class="svg-container"><img src="../static/icons/masters.svg"></div>
-                <span class="text-container">Выбрать мастера</span>
-            </div>
-            <div id="picService" class="home-row">
-                <div class="svg-container"><img src="../static/icons/services.svg"></div>
-                <span class="text-container">Выбрать услуги</span>
-            </div>
-            <div id="picDate" class="home-row">
-                <div class="svg-container"><img src="../static/icons/calendar.svg"></div>
-                <span class="text-container">Выбрать дату и время</span>
-            </div>
+        <div class="d-flex align-items-center mt-4">
+            <label>Партнер 2</label>
+            <img src="/static/icons/women.svg">
+            <input type="date" id="womenDate" class="ms-3" style="border-radius: 8px;">
+            <input type="time" id="womenTime" class="ms-2" style="border-radius: 8px;">
         </div>
-        <div id="masters-form" style="display: none;">
-            <div>
-                <h5 class="header-form">Выбрать специалиста</h5>
-                <div id="masters-container" class="form-container">
-
-                </div>
-            </div>
-        </div>
-        <div id="services-form" style="display: none;">
-            <div>
-                <h5 class="header-form">Выбрать услуги</h5>
-                <div id="services-container" class="form-container">
-
-                </div>
-            </div>
-        </div>
-        <div id="dates-form" style="display: none;">
-            <div>
-                <h5 class="header-form">Выбрать дату и время</h5>
-                <div data-bs-toggle="calendar" id="example">
-                </div>
-                <div id="time-container">
-
-                </div>
-            </div>
-        </div>
-        <div id="result-form" style="display: none;">
-            <div>
-                <h5 class="header-form">Итого</h5>
-                <div id="result-container">
-                    <div class="form-row"><img style="margin-right: 7px;" src="../static/icons/avatar.svg">
-                        <div style="display:flex;flex-direction:column;"><span class="master-name"></span><span
-                                class="pos"></span></div>
-                    </div>
-                    <div class="form-row"><div class="svg-container"><img src="../static/icons/calendar.svg"></div>
-                        <div style="display:flex;flex-direction:column; margin-left: 7px;"><span class="result-date"></span><span
-                                class="result-time"></span></div>
-                    </div>
-                    <div id="result-services">
-                        <div id="result-services-header">
-                            <span><strong>Услуги</strong></span>
-                            <span class="duration"></span>
-                        </div>
-                        <div id="result-services-container">
-
-                        </div>
-                    </div>
-                    <div id="result-services-total">
-                        <span>Итого</span>
-                        <span id="totalPrice"></span>
-                    </div>
-                </div>
-            </div>
-            <form id="personal-form">
-                <div class="personal-header"><h5>Ваши данные</h5></div>
-                <div class="personal-form-row">
-                    <label for="form-name">Имя *</label>
-                    <input type="text" placeholder="Введите имя" id="form-name" required>
-                </div>
-                <div class="personal-form-row">
-                    <label for="form-phone">Телефон *</label>
-                    <input type="text" placeholder="+79226838883" id="form-phone" required>
-                </div>
-                <div class="personal-form-row">
-                    <label for="form-comment">Комментарий</label>
-                    <input type="text" placeholder="Комментарий к записи" id="form-comment">
-                </div>
-            </form>
-        </div>
-    </div>
-    <div id="cart" style="display: none;">
-        <div id="cart-container">
-
-        </div>
-        <button class="btn btn-success cartBtn"></button>
+        <button class="btn btn-success mt-3" id="mainBtn">Рассчитать совместимость</button>
     </div>
     <!-- Модальное окно редактирования корзины услуг -->
-    <div class="modal fade" id="editCartModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
+    <div class="modal fade" id="editCartModal" tabindex="-1" style="min-width: 70%;">
+        <div class="modal-dialog modal-dialog-centered" style="min-width: 70%;">
             <div class="modal-content">
                 <div class="modal-header">
                     <div id="modalHeader" style="width: 100%;">
@@ -137,10 +57,6 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div id="modalCartContainer">
-
-                    </div>
-                    <button class="btn btn-success nextMaster">Выбрать специалиста</button>
                 </div>
             </div>
         </div>
