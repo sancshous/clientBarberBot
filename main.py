@@ -2,6 +2,7 @@
 
 from flask import Flask, request, jsonify, render_template
 import sqlite3
+import requests  # Убедитесь, что requests установлен (pip install requests)
 from datetime import datetime, timedelta
 
 app = Flask(__name__, static_folder='static')
@@ -28,6 +29,46 @@ def get_masters():
 def get_services():
     services = query_db('SELECT * FROM services')
     return jsonify([dict(service) for service in services])
+
+@app.route('/api/getAll', methods=['GET'])
+def api_rest():
+    # Делаем GET-запрос к внешнему API
+    response = requests.get('https://dog.ceo/api/breeds/list/all')
+    
+    # Проверяем, что запрос успешен (статус 200)
+    if response.status_code == 200:
+        # Возвращаем JSON-ответ от внешнего API
+        return jsonify(response.json())
+    else:
+        # В случае ошибки возвращаем сообщение об ошибке
+        return jsonify({"error": "Failed to fetch data from external API"}), 500
+
+@app.route('/api/random', methods=['GET'])
+def api_rest():
+    # Делаем GET-запрос к внешнему API
+    response = requests.get('https://dog.ceo/api/breeds/image/random/10')
+    
+    # Проверяем, что запрос успешен (статус 200)
+    if response.status_code == 200:
+        # Возвращаем JSON-ответ от внешнего API
+        return jsonify(response.json())
+    else:
+        # В случае ошибки возвращаем сообщение об ошибке
+        return jsonify({"error": "Failed to fetch data from external API"}), 500
+    
+@app.route('/api/<dog>', methods=['GET'])
+def api_rest_dog(dog):
+    # Делаем GET-запрос к внешнему API
+    response = requests.get(f'https://dog.ceo/api/breed/{dog}/images/random/10')
+    
+    # Проверяем, что запрос успешен (статус 200)
+    if response.status_code == 200:
+        # Возвращаем JSON-ответ от внешнего API
+        return jsonify(response.json())
+    else:
+        # В случае ошибки возвращаем сообщение об ошибке
+        return jsonify({"error": "Failed to fetch data from external API"}), 500
+
 
 @app.route('/master_difficult/<pos_id>', methods=['GET'])
 def get_masters_difficult(pos_id):
