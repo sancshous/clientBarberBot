@@ -31,7 +31,7 @@ def get_services():
     return jsonify([dict(service) for service in services])
 
 @app.route('/api/getAll', methods=['GET'])
-def api_rest():
+def api_rest_all():
     # Делаем GET-запрос к внешнему API
     response = requests.get('https://dog.ceo/api/breeds/list/all')
     
