@@ -25,6 +25,17 @@ def get_masters():
     masters = query_db('SELECT * FROM masters')
     return jsonify([dict(master) for master in masters])
 
+@app.route('/vk', methods=['GET', 'POST'])
+def handle_vk():
+    try:
+        response = jsonify('cf9500a7')
+        response.headers['Content-Type'] = 'application/json; charset=utf-8'
+        
+        return response
+        
+    except Exception as e:
+        print(f"Произошла ошибка: {str(e)}")
+
 @app.route('/services', methods=['GET'])
 def get_services():
     services = query_db('SELECT * FROM services')
